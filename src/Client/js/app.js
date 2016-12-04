@@ -20,9 +20,11 @@ emitter.on('connect', function(){
 
 // on every message, print it out
 emitter.on('message', function(msg){
-
     // log that we've received a message
-    console.log('emitter: received ' + msg.asString() );
+    msg = msg.asObject();
+
+    // make sure we load avatars from HTTPs scheme
+    msg.avatar = msg.avatar.replace(/^http:\/\//i, 'https://');
 
     // If we have already 5 messages, remove the oldest one (first)
     if (vue.$data.messages.length >= 7){
@@ -30,5 +32,5 @@ emitter.on('message', function(msg){
     }
 
     // Push the message we've received and update an identicon once it's there
-    vue.$data.messages.push(msg.asObject());
+    vue.$data.messages.push(msg);
 });
